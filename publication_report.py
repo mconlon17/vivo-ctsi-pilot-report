@@ -3,17 +3,14 @@
     publication_report.py -- Given a list of people, produce a Word document
     listing publications for each, most recent first
 
-    Version 0.0 MC 2014-03-25
-    --  Getting started
-
-    To Do
-    --  Everything.  pylint, testing, formatting
+    Version 0.1 MC 2014-03-25
+    --  Works as expected
 """
 
 __author__ = "Michael Conlon"
 __copyright__ = "Copyright 2014, University of Florida"
 __license__ = "BSD 3-Clause license"
-__version__ = "0.0"
+__version__ = "0.1"
 
 from vivotools import read_csv
 from vivotools import get_person
@@ -96,10 +93,6 @@ for row in ufids.values():
                 pub['date'] = {'year': None}
         for publication in sorted(person['publications'],
                                   key=lambda pub: pub['date']['year'], reverse=True):
-            try:
-                print 'pub', int(publication['date']['year']), int(YEAR)
-            except:
-                continue
             if int(publication['date']['year']) >= int(YEAR):
                 para_props = ParagraphPropertySet()
                 para_props.SetFirstLineIndent(TabPropertySet.DEFAULT_WIDTH*-1)
