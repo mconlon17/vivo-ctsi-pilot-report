@@ -31,11 +31,11 @@ from rtfng.PropertySets import TabPropertySet, TextPropertySet, \
 
 # Start here
 
-YEAR = 2008  # Pubs must be on or after this year
+YEAR = None  # Pubs must be on or after this year
 REPORT_TITLE = 'Publication Report'
 
 print str(datetime.datetime.now())
-ufids = read_csv("publication_report_data.csv")
+ufids = read_csv("tanner.txt")
 
 previousPerson = None
 
@@ -78,6 +78,15 @@ section.append(p)
 for row in ufids.values():
     ufid = row['ufid']
     uri = find_vivo_uri("ufVivo:ufid", ufid)
+    if uri is None:
+        print ufid,' not found'
+        person = {}
+        person['display_name'] = 'UFID '+ ufid + ' not found'
+        p = Paragraph(ss.ParagraphStyles.Heading1)
+        p. append(person['display_name'])
+        section.append(p)
+        previousPerson = person
+        continue
     person = get_person(uri, get_publications=True)
     print person['display_name'], len(person['publications']), "publications"
 
@@ -93,7 +102,8 @@ for row in ufids.values():
                 pub['date'] = {'year': None}
         for publication in sorted(person['publications'],
                                   key=lambda pub: pub['date']['year'], reverse=True):
-            if int(publication['date']['year']) >= int(YEAR):
+            if publication['date']['year'] is not None and (YEAR is None or  \
+                                int(publication['date']['year']) >= int(YEAR)):
                 para_props = ParagraphPropertySet()
                 para_props.SetFirstLineIndent(TabPropertySet.DEFAULT_WIDTH*-1)
                 para_props.SetLeftIndent(TabPropertySet.DEFAULT_WIDTH*2)
