@@ -35,7 +35,7 @@ YEAR = None  # Pubs must be on or after this year
 REPORT_TITLE = 'Publication Report'
 
 print str(datetime.datetime.now())
-ufids = read_csv("tanner.txt")
+ufids = read_csv("weller.txt")
 
 previousPerson = None
 
