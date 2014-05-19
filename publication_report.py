@@ -35,7 +35,7 @@ YEAR = None  # Pubs must be on or after this year
 REPORT_TITLE = 'Publication Report'
 
 print str(datetime.datetime.now())
-ufids = read_csv("weller.txt")
+ufids = read_csv("weller2.csv")
 
 previousPerson = None
 
@@ -77,7 +77,11 @@ section.append(p)
 
 for row in ufids.values():
     ufid = row['ufid']
-    uri = find_vivo_uri("ufVivo:ufid", ufid)
+    if ufid.startswith('http'):
+        uri = ufid
+        ufid = None
+    else:
+        uri = find_vivo_uri("ufVivo:ufid", ufid)
     if uri is None:
         print ufid,' not found'
         person = {}
@@ -88,6 +92,8 @@ for row in ufids.values():
         previousPerson = person
         continue
     person = get_person(uri, get_publications=True)
+    print uri
+    print person
     print person['display_name'], len(person['publications']), "publications"
 
     if previousPerson != person:
